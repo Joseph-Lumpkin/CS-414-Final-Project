@@ -83,3 +83,7 @@ lint/generated/
 lint/outputs/
 lint/tmp/
 # lint/reports/
+
+# Node Modules
+Squibb-API/node_modules/*
+Squibb-API/.env

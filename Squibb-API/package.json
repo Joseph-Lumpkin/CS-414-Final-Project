@@ -1,0 +1,36 @@
+{
+  "name": "squibb-api",
+  "version": "0.1.0",
+  "description": "API for Squibb",
+  "main": "./src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Joseph-Lumpkin/CS-414-Final-Project"
+  },
+  "author": "Joseph Lumpkin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Joseph-Lumpkin/CS-414-Final-Project/issues"
+  },
+  "homepage": "https://github.com/Joseph-Lumpkin/CS-414-Final-Project#readme",
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "cookie-session": "^2.0.0",
+    "cors": "^2.8.5",
+    "dot-env": "^0.0.1",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "helmet": "^5.1.1",
+    "jsonwebtoken": "^9.0.0",
+    "morgan": "^1.10.0",
+    "mysql2": "^2.3.3",
+    "nodemon": "^2.0.19",
+    "passport": "^0.6.0",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-jwt": "^4.0.0",
+    "sequelize": "^6.21.3"
+  }
+}
