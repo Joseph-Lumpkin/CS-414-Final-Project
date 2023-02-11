@@ -87,3 +87,6 @@ lint/tmp/
 # Node Modules
 Squibb-API/node_modules/*
 Squibb-API/.env
+Squibb-Android/app/google-services.json
+Squibb-Android/.idea/*
+*.DS_Store
