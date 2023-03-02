@@ -17,12 +17,6 @@ import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.auth.api.identity.SignInCredential
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.FirebaseApp
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
-import com.google.firebase.database.ktx.getValue
-import com.google.firebase.ktx.Firebase
 import com.squibb.android.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -32,11 +26,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    private val database = Firebase.database
-    private val myRef = database.getReference("message")
-
     private lateinit var oneTapClient: SignInClient
     private lateinit var signInRequest: BeginSignInRequest
+    private lateinit var signUpRequest: BeginSignInRequest
     private val REQ_ONE_TAP = 2  // Can be any integer unique to the Activity
     private var showOneTapUI = true
     private lateinit var credential: SignInCredential
@@ -79,7 +71,18 @@ class MainActivity : AppCompatActivity() {
             .setAutoSelectEnabled(true)
             .build()
 
-        findViewById<Button>(R.id.bDebug).setOnClickListener { writeToDB() }
+        signUpRequest = BeginSignInRequest.builder()
+            .setGoogleIdTokenRequestOptions(
+                BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
+                    .setSupported(true)
+                    // Your server's client ID, not your Android client ID.
+                    .setServerClientId(BuildConfig.API_KEY)
+                    // Show all accounts on the device.
+                    .setFilterByAuthorizedAccounts(false)
+                    .build())
+            .build()
+
+        findViewById<Button>(R.id.bDebug).setOnClickListener { debug() }
         findViewById<Button>(R.id.bSignin).setOnClickListener { signIn() }
     }
 
@@ -97,6 +100,22 @@ class MainActivity : AppCompatActivity() {
             .addOnFailureListener(this) { e ->
                 // No saved credentials found. Launch the One Tap sign-up flow, or
                 // do nothing and continue presenting the signed-out UI.
+
+                oneTapClient.beginSignIn(signUpRequest)
+                    .addOnSuccessListener(this) { result ->
+                        try {
+                            startIntentSenderForResult(
+                                result.pendingIntent.intentSender, REQ_ONE_TAP,
+                                null, 0, 0, 0)
+                        } catch (e: IntentSender.SendIntentException) {
+                            Log.e(TAG, "Couldn't start One Tap UI: ${e.localizedMessage}")
+                        }
+                    }
+                    .addOnFailureListener(this) { e ->
+                        // No Google Accounts found. Just continue presenting the signed-out UI.
+                        Log.d(TAG, e.localizedMessage)
+                    }
+
                 Log.d(TAG, e.localizedMessage)
             }
     }
@@ -132,27 +151,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    private fun writeToDB() {
-        myRef.setValue(credential.id)
-    }
-
-    private fun readFromDB() {
-        // Read from the database
-        myRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                val value = dataSnapshot.getValue<String>()
-                Log.d(TAG, "Value is: $value")
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException())
-            }
-        })
     }
 
     private fun debug() {
