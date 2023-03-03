@@ -1,4 +1,4 @@
-package com.squibb.android.ui.dashboard
+package com.squibb.android.ui.groups
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.squibb.android.databinding.FragmentDashboardBinding
+import com.squibb.android.databinding.FragmentGroupsBinding
 
-class DashboardFragment : Fragment() {
+class GroupsFragment : Fragment() {
 
-    private var _binding: FragmentDashboardBinding? = null
+    private var _binding: FragmentGroupsBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -22,14 +22,14 @@ class DashboardFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val dashboardViewModel =
-            ViewModelProvider(this).get(DashboardViewModel::class.java)
+        val groupsViewModel =
+            ViewModelProvider(this).get(GroupsViewModel::class.java)
 
-        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
+        _binding = FragmentGroupsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textDashboard
-        dashboardViewModel.text.observe(viewLifecycleOwner) {
+        val textView: TextView = binding.textGroups
+        groupsViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
         return root

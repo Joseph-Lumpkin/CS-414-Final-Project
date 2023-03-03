@@ -1,13 +1,13 @@
-package com.squibb.android.ui.dashboard
+package com.squibb.android.ui.groups
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class DashboardViewModel : ViewModel() {
+class GroupsViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is dashboard Fragment"
+        value = "This is groups Fragment"
     }
     val text: LiveData<String> = _text
 }
