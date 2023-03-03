@@ -12,6 +12,21 @@
         android:theme="@style/Theme.Squibb"
         tools:targetApi="31">
         <activity
+            android:name=".TaskReviewActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TaskCreationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TaskActivity"
+            android:exported="false" />
+        <activity
+            android:name=".GroupJoinActivity"
+            android:exported="false" />
+        <activity
+            android:name=".GroupActivity"
+            android:exported="false" />
+        <activity
             android:name=".LoginActivity"
             android:exported="false" />
         <activity
