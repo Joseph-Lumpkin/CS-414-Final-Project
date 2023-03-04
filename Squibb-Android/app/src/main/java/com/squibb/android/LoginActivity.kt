@@ -31,7 +31,6 @@ class LoginActivity : AppCompatActivity() {
     /** Statically defined keywords */
     companion object {
         const val dsKEY_ID_TOKEN = "idToken"
-        //TODO Remove reference to the user's email credentials. We don't want to deal with PII
         const val dsKEY_EMAIL = "email"
     }
 
@@ -85,8 +84,7 @@ class LoginActivity : AppCompatActivity() {
                     // Got an ID token from Google. Use it to authenticate with your backend.
                     Log.d(TAG, "Got ID token: $idToken")
                     // Got a saved username
-                    //TODO Remove reference to the user's email credentials. We don't want to deal with PII
-                    Log.d(TAG, "Got username: $email")
+                    Log.d(TAG, "Got email: $email")
                     if (email != null) {
                         val finishLoginIntent = Intent()
                         finishLoginIntent.putExtra(dsKEY_ID_TOKEN, idToken)

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools" >
 
     <application
         android:allowBackup="true"
@@ -10,21 +10,24 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.Squibb"
-        tools:targetApi="31">
+        tools:targetApi="31" >
         <activity
-            android:name=".TaskReviewActivity"
+            android:name=".taskactivities.TaskReviewActivity"
             android:exported="false" />
         <activity
-            android:name=".TaskCreationActivity"
+            android:name=".taskactivities.TaskCreationActivity"
             android:exported="false" />
         <activity
-            android:name=".TaskActivity"
+            android:name=".taskactivities.TaskActivity"
             android:exported="false" />
         <activity
-            android:name=".GroupJoinActivity"
+            android:name=".groupactivities.GroupJoinActivity"
             android:exported="false" />
         <activity
-            android:name=".GroupActivity"
+            android:name=".groupactivities.GroupCreateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".groupactivities.GroupActivity"
             android:exported="false" />
         <activity
             android:name=".LoginActivity"
@@ -32,7 +35,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name">
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

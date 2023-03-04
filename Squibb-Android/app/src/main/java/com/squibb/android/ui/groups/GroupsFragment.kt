@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.squibb.android.GroupJoinActivity
+import com.squibb.android.groupactivities.*
 import com.squibb.android.databinding.FragmentGroupsBinding
 
 class GroupsFragment : Fragment() {
@@ -46,11 +46,17 @@ class GroupsFragment : Fragment() {
 
     private fun initViews() {
         // Set onClickListeners
-        mBinding?.bJoin?.setOnClickListener { launchJoinGroupActivity() }
+        mBinding?.bGroupsJoin?.setOnClickListener { launchJoinGroupActivity() }
+        mBinding?.bGroupsCreate?.setOnClickListener { launchCreateGroupActivity() }
     }
 
     private fun launchJoinGroupActivity() {
         val launchJoinGroupIntent = Intent(context, GroupJoinActivity::class.java)
+        startActivity(launchJoinGroupIntent)
+    }
+
+    private fun launchCreateGroupActivity() {
+        val launchJoinGroupIntent = Intent(context, GroupCreateActivity::class.java)
         startActivity(launchJoinGroupIntent)
     }
 }

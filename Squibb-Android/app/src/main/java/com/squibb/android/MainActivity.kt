@@ -2,6 +2,7 @@ package com.squibb.android
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
@@ -31,9 +32,13 @@ class MainActivity : AppCompatActivity() {
                 val data = result.data
                 val idToken = data?.getStringExtra(LoginActivity.dsKEY_ID_TOKEN)
                 Log.d(TAG, "$idToken successfully retrieved and returned to $TAG.")
-                //TODO Remove reference to the user's email credentials. We don't want to deal with PII
                 val email = data?.getStringExtra(LoginActivity.dsKEY_EMAIL)
                 Log.d(TAG, "$email successfully logged in and returned to $TAG.")
+            } else if (result.resultCode == Activity.RESULT_CANCELED) {
+                if(!BuildConfig.DEBUG) {
+                    // If the users cancelled the login process
+                    finish()    // Close the application
+                }
             }
         }
 

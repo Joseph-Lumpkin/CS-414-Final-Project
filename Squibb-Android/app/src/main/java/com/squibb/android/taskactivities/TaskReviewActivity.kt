@@ -1,7 +1,8 @@
-package com.squibb.android
+package com.squibb.android.taskactivities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.squibb.android.R
 
 class TaskReviewActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
