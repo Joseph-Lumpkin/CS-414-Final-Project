@@ -7,12 +7,55 @@
     tools:context=".groupactivities.GroupCreateActivity">
 
     <TextView
+        android:id="@+id/tvGCDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="This is the group create activity"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:gravity="center"
+        android:text="This is the group create activity.\nCreate a new group by entering the following information below."
+        app:layout_constraintBottom_toTopOf="@+id/edGCName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/edGCName"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:hint="Group Name"
+        android:maxLength="32"
+        app:layout_constraintBottom_toTopOf="@+id/edGCPassOne"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvGCDescription" />
+
+    <EditText
+        android:id="@+id/edGCPassOne"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:hint="Group Password"
+        app:layout_constraintBottom_toTopOf="@+id/edGCPassTwo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edGCName" />
+
+    <EditText
+        android:id="@+id/edGCPassTwo"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:hint="Verify Group Password"
+        app:layout_constraintBottom_toTopOf="@+id/bGCSubmit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edGCPassOne" />
+
+    <Button
+        android:id="@+id/bGCSubmit"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edGCPassTwo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
