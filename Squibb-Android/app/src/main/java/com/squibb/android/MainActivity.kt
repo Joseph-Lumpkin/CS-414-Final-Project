@@ -2,7 +2,6 @@ package com.squibb.android
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
@@ -14,6 +13,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.firebase.FirebaseApp
 import com.squibb.android.databinding.ActivityMainBinding
+import com.squibb.android.models.User
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,6 +23,9 @@ class MainActivity : AppCompatActivity() {
     /** View Binding */
     private lateinit var mBinding: ActivityMainBinding
 
+    /** Application User */
+    private lateinit var mUser: User
+
     /** LoginActivity Result Listener */
     private val mLoginActivityLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -30,10 +33,13 @@ class MainActivity : AppCompatActivity() {
             if (result.resultCode == Activity.RESULT_OK) {
                 // Retrieve the credentials and save the retrieved user account
                 val data = result.data
-                val idToken = data?.getStringExtra(LoginActivity.dsKEY_ID_TOKEN)
-                Log.d(TAG, "$idToken successfully retrieved and returned to $TAG.")
-                val email = data?.getStringExtra(LoginActivity.dsKEY_EMAIL)
-                Log.d(TAG, "$email successfully logged in and returned to $TAG.")
+                val idToken = data?.getStringExtra(User.dsKEY_ID_TOKEN)
+                if (data != null && idToken != null) {
+                    // Create a user object with the obtained login data
+                    Log.d(TAG, "User successfully retrieved and returned to $TAG.")
+                    mUser = User(idToken)
+                    mUser.read() // Load remaining data from database
+                }
             } else if (result.resultCode == Activity.RESULT_CANCELED) {
                 if(!BuildConfig.DEBUG) {
                     // If the users cancelled the login process
@@ -60,6 +66,9 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
+        // Initialize onClickListeners
+        mBinding.bMainDebug.setOnClickListener { debug() }
+
         // Always require the user to sign in
         goToLoginActivity()
     }
@@ -79,6 +88,8 @@ class MainActivity : AppCompatActivity() {
      * Use this function to debug the application.
      */
     private fun debug() {
-        println("")
+        Log.d(TAG, mUser.getUserId())
+        Log.d(TAG, mUser.getEmail())
+        Log.d(TAG, mUser.getGroups().toString())
     }
 }

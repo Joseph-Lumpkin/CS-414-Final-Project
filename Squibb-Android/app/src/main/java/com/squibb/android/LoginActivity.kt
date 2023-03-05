@@ -12,6 +12,7 @@ import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.auth.api.identity.SignInCredential
 import com.google.android.gms.common.api.ApiException
 import com.squibb.android.databinding.ActivityLoginBinding
+import com.squibb.android.models.User
 
 class LoginActivity : AppCompatActivity() {
 
@@ -27,12 +28,6 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var signUpRequest: BeginSignInRequest
     private lateinit var credential: SignInCredential
     private val REQ_ONE_TAP = 2
-
-    /** Statically defined keywords */
-    companion object {
-        const val dsKEY_ID_TOKEN = "idToken"
-        const val dsKEY_EMAIL = "email"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,19 +76,24 @@ class LoginActivity : AppCompatActivity() {
                     credential = oneTapClient.getSignInCredentialFromIntent(data)
                     val idToken = credential.googleIdToken
                     val email = credential.id
-                    // Got an ID token from Google. Use it to authenticate with your backend.
+                    // Got an ID token from Google. Use it to authenticate with your backend
                     Log.d(TAG, "Got ID token: $idToken")
                     // Got a saved username
                     Log.d(TAG, "Got email: $email")
-                    if (email != null) {
+                    if (email != null && idToken != null) {
+                        /* Process the user login
+                        * Create a user if they do not exist, load a user if they do. */
+                        var user = User(idToken)
+                        user.setEmail(email)
+                        processUserLogin(user)
+                        // Send the user's ID to the calling activity for a global reference
                         val finishLoginIntent = Intent()
-                        finishLoginIntent.putExtra(dsKEY_ID_TOKEN, idToken)
-                        finishLoginIntent.putExtra(dsKEY_EMAIL, email)
+                        finishLoginIntent.putExtra(User.dsKEY_ID_TOKEN, idToken)
                         setResult(Activity.RESULT_OK, finishLoginIntent)
                         finish()
                     }
                 } catch (e: ApiException) {
-                    println("error")
+                    Log.d(TAG, e.localizedMessage)
                 }
             }
         }
@@ -120,7 +120,6 @@ class LoginActivity : AppCompatActivity() {
             }
     }
 
-
     /**
      * Display the OneTapClient Sign Up UI
      */
@@ -142,5 +141,16 @@ class LoginActivity : AppCompatActivity() {
                 // Do nothing and continue presenting the signed-out UI.
                 Log.d(TAG, e.localizedMessage)
             }
+    }
+
+    /**
+     * User successfully logged in.
+     * Add the user to the database,
+     * or update the user's information.
+     *
+     * @param user  - The user object to create or update in the database.
+     */
+    private fun processUserLogin(user: User) {
+        user.create()
     }
 }
