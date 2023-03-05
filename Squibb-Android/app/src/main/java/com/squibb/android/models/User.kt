@@ -1,6 +1,7 @@
 package com.squibb.android.models
 
 import android.util.Log
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -99,15 +100,14 @@ class User(
         val user = hashMapOf(
             dsKEY_EMAIL to mEmail
         )
-        db.collection(dsKEY_USER_COLLECTION).document(mUserId)
-            .set(user, SetOptions.merge())
+        val userRef = db.collection(dsKEY_USER_COLLECTION).document(mUserId)
+        userRef.set(user, SetOptions.merge())
             .addOnSuccessListener {
                 Log.d(TAG, "DocumentSnapshot successfully written!")
-                /* After successful creation or merge of data,
-                * Attempt to read in any remaining data from the database */
-                read()
             }
             .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
+
+        userRef.update(dsKEY_ASSOCIATED_GROUPS, FieldValue.arrayUnion(""))
     }
 
     /**

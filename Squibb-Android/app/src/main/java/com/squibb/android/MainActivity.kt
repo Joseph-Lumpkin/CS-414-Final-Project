@@ -7,12 +7,14 @@ import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.firebase.FirebaseApp
 import com.squibb.android.databinding.ActivityMainBinding
+import com.squibb.android.models.SharedViewModel
 import com.squibb.android.models.User
 
 class MainActivity : AppCompatActivity() {
@@ -23,8 +25,11 @@ class MainActivity : AppCompatActivity() {
     /** View Binding */
     private lateinit var mBinding: ActivityMainBinding
 
+    /** Shared View Model for passing data to fragments */
+    private lateinit var mSharedViewModel: SharedViewModel
+
     /** Application User */
-    private lateinit var mUser: User
+    lateinit var mUser: User
 
     /** LoginActivity Result Listener */
     private val mLoginActivityLauncher =
@@ -38,6 +43,8 @@ class MainActivity : AppCompatActivity() {
                     // Create a user object with the obtained login data
                     Log.d(TAG, "User successfully retrieved and returned to $TAG.")
                     mUser = User(idToken)
+                    // Add the user ID to be shared across fragments
+                    mSharedViewModel.mUser.value = mUser
                     mUser.read() // Load remaining data from database
                 }
             } else if (result.resultCode == Activity.RESULT_CANCELED) {
@@ -50,6 +57,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Initialize the SharedViewModel
+        mSharedViewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
         // Initialize the firebase app
         FirebaseApp.initializeApp(applicationContext)
         // Initialize the view binding
