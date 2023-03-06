@@ -7,7 +7,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class User(
-    private var mUserId: String // ID of the user
+    private var mEmail: String // Email of the user
 ) {
 
     /** Debug logging tag */
@@ -31,8 +31,11 @@ class User(
         const val dsKEY_ASSOCIATED_GROUPS = "associatedGroups"
     }
 
-    /** Email of the user */
-    private lateinit var mEmail: String
+    /** ID Token of the user */
+    private var mUserId = ""
+
+    ///** Email of the user */
+    //private lateinit var mEmail: String
 
     /** List of Groups associated with this user*/
     private var mGroups = arrayListOf<String>()
@@ -44,6 +47,15 @@ class User(
      */
     fun getUserId(): String {
         return mUserId
+    }
+
+    /**
+     * Set the User's ID
+     *
+     * @param userId   - ID of the user.
+     */
+    fun setUserId(userId: String) {
+        mUserId = userId
     }
 
     /**
@@ -98,9 +110,9 @@ class User(
      */
     fun create() {
         val user = hashMapOf(
-            dsKEY_EMAIL to mEmail
+            dsKEY_ID_TOKEN to mUserId
         )
-        val userRef = db.collection(dsKEY_USER_COLLECTION).document(mUserId)
+        val userRef = db.collection(dsKEY_USER_COLLECTION).document(mEmail)
         userRef.set(user, SetOptions.merge())
             .addOnSuccessListener {
                 Log.d(TAG, "DocumentSnapshot successfully written!")
@@ -108,18 +120,19 @@ class User(
             .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
 
         userRef.update(dsKEY_ASSOCIATED_GROUPS, FieldValue.arrayUnion(""))
+        userRef.update(dsKEY_ID_TOKEN, mUserId)
     }
 
     /**
      * Read this user object from the database.
      */
     fun read() {
-        val docRef = db.collection("users").document(mUserId)
+        val docRef = db.collection("users").document(mEmail)
         docRef.get()
             .addOnSuccessListener { document ->
                 if (document != null) {
                     Log.d(TAG, "DocumentSnapshot data: ${document.data}")
-                    mEmail = document.get(dsKEY_EMAIL) as String
+                    mUserId = document.get(dsKEY_ID_TOKEN) as String
                     mGroups = document.get(dsKEY_ASSOCIATED_GROUPS) as ArrayList<String>
                 } else {
                     Log.d(TAG, "No such document")

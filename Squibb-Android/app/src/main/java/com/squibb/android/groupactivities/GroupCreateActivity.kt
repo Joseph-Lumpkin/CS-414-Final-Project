@@ -25,7 +25,7 @@ class GroupCreateActivity : AppCompatActivity() {
         setContentView(mBinding.root)
 
         // Get the ID of the person creating this group
-        mOwnerId = intent.getStringExtra(User.dsKEY_ID_TOKEN).toString()
+        mOwnerId = intent.getStringExtra(User.dsKEY_EMAIL).toString()
 
         // Initialize the onClickListeners for this activity
         initOnClickListeners()

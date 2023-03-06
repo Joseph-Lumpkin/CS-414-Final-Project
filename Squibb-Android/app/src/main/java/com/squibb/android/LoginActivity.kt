@@ -75,6 +75,7 @@ class LoginActivity : AppCompatActivity() {
                 try {
                     credential = oneTapClient.getSignInCredentialFromIntent(data)
                     val idToken = credential.googleIdToken
+                    // Gmails are unchangeable, use this to identify the user
                     val email = credential.id
                     // Got an ID token from Google. Use it to authenticate with your backend
                     Log.d(TAG, "Got ID token: $idToken")
@@ -83,12 +84,12 @@ class LoginActivity : AppCompatActivity() {
                     if (email != null && idToken != null) {
                         /* Process the user login
                         * Create a user if they do not exist, load a user if they do. */
-                        var user = User(idToken)
-                        user.setEmail(email)
+                        var user = User(email)
+                        user.setUserId(idToken)
                         processUserLogin(user)
                         // Send the user's ID to the calling activity for a global reference
                         val finishLoginIntent = Intent()
-                        finishLoginIntent.putExtra(User.dsKEY_ID_TOKEN, idToken)
+                        finishLoginIntent.putExtra(User.dsKEY_EMAIL, email)
                         setResult(Activity.RESULT_OK, finishLoginIntent)
                         finish()
                     }

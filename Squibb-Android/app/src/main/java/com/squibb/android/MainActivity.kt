@@ -38,11 +38,11 @@ class MainActivity : AppCompatActivity() {
             if (result.resultCode == Activity.RESULT_OK) {
                 // Retrieve the credentials and save the retrieved user account
                 val data = result.data
-                val idToken = data?.getStringExtra(User.dsKEY_ID_TOKEN)
-                if (data != null && idToken != null) {
+                val email = data?.getStringExtra(User.dsKEY_EMAIL)
+                if (data != null && email != null) {
                     // Create a user object with the obtained login data
                     Log.d(TAG, "User successfully retrieved and returned to $TAG.")
-                    mUser = User(idToken)
+                    mUser = User(email)
                     // Add the user ID to be shared across fragments
                     mSharedViewModel.mUser.value = mUser
                     mUser.read() // Load remaining data from database

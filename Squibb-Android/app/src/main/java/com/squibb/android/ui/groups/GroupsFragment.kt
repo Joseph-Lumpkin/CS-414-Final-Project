@@ -77,7 +77,7 @@ class GroupsFragment : Fragment() {
         val launchCreateGroupIntent = Intent(context, GroupCreateActivity::class.java)
         val user = mSharedViewModel.mUser.value
         if (user != null) {
-            launchCreateGroupIntent.putExtra(User.dsKEY_ID_TOKEN, user.getUserId())
+            launchCreateGroupIntent.putExtra(User.dsKEY_EMAIL, user.getEmail())
         }
         startActivity(launchCreateGroupIntent)
     }
